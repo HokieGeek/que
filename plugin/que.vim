@@ -97,7 +97,8 @@ function! GetStatusLine()
     return l:statusline
 endfunction
 
-" We don't want to start this guy in Cygwin because SOOO SLOWWWWWW
+" function! QueToggleStatusLine()
     " setlocal statusline=%!GetStatusLine()
     " autocmd BufWinEnter * setlocal statusline=%!GetStatusLine(winnr())
     autocmd BufWinEnter * setlocal statusline=%!GetStatusLine()
+" endfunction

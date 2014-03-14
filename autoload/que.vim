@@ -1,4 +1,26 @@
-function! que#GetStatusLine(win_num)
+function! que#DefineHighlights() "{{{
+    highlight SL_HL_Default ctermbg=233 ctermfg=249 cterm=none
+    highlight SL_HL_Mode ctermbg=55 ctermfg=7 cterm=bold
+    highlight SL_HL_PasteWarning ctermbg=140 ctermfg=232 cterm=bold
+
+    highlight SL_HL_FileNotModifiedNotReadOnly ctermbg=233 ctermfg=249 cterm=none
+    highlight SL_HL_FileNotModifiedReadOnly ctermbg=233 ctermfg=88 cterm=bold
+    highlight SL_HL_FileModifiedNotReadOnly ctermbg=22 ctermfg=7 cterm=none
+    highlight SL_HL_FileModifiedReadOnly ctermbg=22 ctermfg=196 cterm=bold
+
+    highlight SL_HL_FileNotModifiableNotReadOnly ctermbg=88 ctermfg=232 cterm=bold
+    highlight SL_HL_FileNotModifiableReadOnly ctermbg=88 ctermfg=9 cterm=bold
+
+    highlight SL_HL_FileTypeIsUnix ctermbg=233 ctermfg=239 cterm=none
+    highlight SL_HL_FileTypeNotUnix ctermbg=52 ctermfg=233 cterm=none
+
+    highlight SL_HL_CapsLockWarning ctermbg=118 ctermfg=232 cterm=bold
+
+    highlight SL_HL_FileInfo ctermbg=234 ctermfg=244 cterm=none
+    highlight SL_HL_FileInfoTotalLines ctermbg=234 ctermfg=239 cterm=none
+endfunction " }}}
+
+function! que#GetStatusLine(win_num) " {{{
     " echomsg "Updating: ".a:win_num
     let l:buf_num = winbufnr(a:win_num)
 
@@ -81,4 +103,6 @@ function! que#GetStatusLine(win_num)
 
     return l:statusline
     " call setwinvar(a:win_num, '&statusline', l:statusline)
-endfunction
+endfunction " }}}
+
+" vim: set foldmethod=marker number relativenumber formatoptions-=tc:

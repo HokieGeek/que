@@ -44,7 +44,7 @@ function! que#GetStatusLine(win_num, active) " {{{
     " File name, type and modified
     let l:filename = bufname(l:buf_num)
     if len(l:filename) > 0
-        let l:statusline.="\ "
+        " let l:statusline.="\ "
         if getbufvar(l:buf_num, '&modifiable')
             if getbufvar(l:buf_num, '&modified')
                 if getbufvar(l:buf_num, '&readonly')
@@ -76,7 +76,8 @@ function! que#GetStatusLine(win_num, active) " {{{
         else
             let l:statusline.="%#SL_HL_FileTypeNotUnix#"
         endif
-        let l:statusline.="\ ".l:ft."\ "
+        " let l:statusline.="\ ".l:ft."\ "
+        let l:statusline.=l:ft."\ "
     endif
 
     " Display git info

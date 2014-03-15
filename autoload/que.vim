@@ -23,6 +23,8 @@ function! que#DefineHighlights() "{{{
     highlight SL_HL_GitModified ctermbg=25 ctermfg=88 cterm=bold
     highlight SL_HL_GitStaged ctermbg=25 ctermfg=40 cterm=bold
     highlight SL_HL_GitUntracked ctermbg=25 ctermfg=7 cterm=bold
+
+    highlight SL_HL_SyntasticError ctermbg=88 ctermfg=7 cterm=bold
 endfunction " }}}
 
 function! que#GetStatusLine(win_num, active) " {{{
@@ -92,13 +94,10 @@ function! que#GetStatusLine(win_num, active) " {{{
     let l:statusline.=l:vit_status
 
     " Right-justify the rest
-    let l:statusline.="%#SL_HL_Default#"
-    let l:statusline.="%="
+    let l:statusline.="%#SL_HL_Default#%="
 
     " Syntastic flag
-    let l:statusline.="%#warningmsg#"
-    let l:statusline.="%{SyntasticStatuslineFlag()}"
-    let l:statusline.="%#SL_HL_Default#"
+    let l:statusline.="%#SL_HL_SyntasticError#%{SyntasticStatuslineFlag()}%#SL_HL_Default#"
 
     " TODO: This gets expensive
     " let l:capsState = system("xset -q | grep \"Caps Lock\" | awk '{ print $2$3$4 }'")

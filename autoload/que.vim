@@ -18,47 +18,52 @@ function! que#DefineHighlights() "{{{
 
     highlight SL_HL_FileInfo ctermbg=234 ctermfg=244 cterm=none
     highlight SL_HL_FileInfoTotalLines ctermbg=234 ctermfg=239 cterm=none
+
+    highlight SL_HL_GitBranch ctermbg=25 ctermfg=232 cterm=bold
+    highlight SL_HL_GitModified ctermbg=25 ctermfg=88 cterm=bold
+    highlight SL_HL_GitStaged ctermbg=25 ctermfg=40 cterm=bold
+    highlight SL_HL_GitUntracked ctermbg=25 ctermfg=7 cterm=bold
 endfunction " }}}
 
-function! que#GetStatusLine(win_num) " {{{
-    " echomsg "Updating: ".a:win_num
+function! que#GetStatusLine(win_num, active) " {{{
+    " echomsg " que#GetStatusLine(".a:win_num.", ".a:active.")"
     let l:buf_num = winbufnr(a:win_num)
 
-    " TODO: change the bg of the mode indicator
-    let l:mode = ((a:win_num == winnr()) ? mode() : " ")
-    let l:statusline="%#SL_HL_mode#\ ".l:mode."\ %#SL_HL_Default#"
-    " let l:statusline="%#SL_HL_mode#\ %{mode()}\ %#SL_HL_Default#"
-    if getbufvar(l:buf_num, '&paste') == 1
-    " if &paste == 1
+    " Mode and active indicator
+    if a:active == 1
+        let l:mode="%#SL_HL_mode#\ %{mode()}\ %#SL_HL_Default#"
+    else
+        let l:mode="%#SL_HL_Default#\ \ \ "
+    endif
+    let l:statusline=l:mode
+    if getbufvar(l:buf_num, '&paste')
         " TODO: Paste ▶
         let l:statusline.="%#SL_HL_PasteWarning# PASTE %#SL_HL_Default#"
     endif
-    " nnoremap <silent> cow :setlocal wrap!<cr>
-    " nnoremap <silent> cos :setlocal spell!<cr>
 
     " File name, type and modified
     let l:filename = bufname(l:buf_num)
     if len(l:filename) > 0
         let l:statusline.="\ "
-        if getbufvar(l:buf_num, '&modifiable') == 1
-            if getbufvar(l:buf_num, '&modified') == 1
-                if getbufvar(l:buf_num, '&readonly') == 0
-                    let l:statusline.="%#SL_HL_FileModifiedNotReadOnly#"
-                else
+        if getbufvar(l:buf_num, '&modifiable')
+            if getbufvar(l:buf_num, '&modified')
+                if getbufvar(l:buf_num, '&readonly')
                     let l:statusline.="%#SL_HL_FileModifiedReadOnly#"
+                else
+                    let l:statusline.="%#SL_HL_FileModifiedNotReadOnly#"
                 endif
             else
-                if getbufvar(l:buf_num, '&readonly') == 0
-                    let l:statusline.="%#SL_HL_FileNotModifiedNotReadOnly#"
-                else
+                if getbufvar(l:buf_num, '&readonly')
                     let l:statusline.="%#SL_HL_FileNotModifiedReadOnly#"
+                else
+                    let l:statusline.="%#SL_HL_FileNotModifiedNotReadOnly#"
                 endif
             endif
         else
-            if getbufvar(l:buf_num, '&readonly') == 0
-                let l:statusline.="%#SL_HL_FileNotModifiableNotReadOnly#"
-            else
+            if getbufvar(l:buf_num, '&readonly')
                 let l:statusline.="%#SL_HL_FileNotModifiableReadOnly#"
+            else
+                let l:statusline.="%#SL_HL_FileNotModifiableNotReadOnly#"
             endif
         endif
         let l:statusline.="\ ".l:filename."\ "
@@ -75,11 +80,15 @@ function! que#GetStatusLine(win_num) " {{{
     endif
 
     " Display git info
-    " let l:tmp=vit#StatusLine(a:win_num)
-    " echomsg "TMP: ".l:tmp
-    " let l:statusline.=l:tmp
-    let l:statusline.=vit#StatusLine(a:win_num)
-    " let l:statusline.=vit#StatusLine()
+    let l:ctime = localtime() - 1
+    if exists("w:que_vit_last_status_time") && w:que_vit_last_status_time >= l:ctime
+        let l:vit_status=getwinvar(a:win_num, 'que_vit_last_status')
+    else
+        let l:vit_status=vit#StatusLine(a:win_num)
+        call setwinvar(a:win_num, 'que_vit_last_status', l:vit_status)
+        call setwinvar(a:win_num, 'que_vit_last_status_time', localtime())
+    endif
+    let l:statusline.=l:vit_status
 
     " Right-justify the rest
     let l:statusline.="%#SL_HL_Default#"

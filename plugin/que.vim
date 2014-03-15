@@ -11,7 +11,7 @@ function! UpdateStatusLine()
 endfunction
 
 " function! QueToggleStatusLine()
-    autocmd BufEnter,WinEnter * set statusline=%!UpdateStatusLine()
+    autocmd BufEnter,WinEnter,BufWritePost * set statusline=%!UpdateStatusLine()
 " endfunction
 
 " vim: set foldmethod=marker number relativenumber formatoptions-=tc:

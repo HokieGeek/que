@@ -14,7 +14,7 @@ function! que#DefineHighlights() "{{{
     highlight SL_HL_FileTypeIsUnix ctermbg=233 ctermfg=239 cterm=none
     highlight SL_HL_FileTypeNotUnix ctermbg=52 ctermfg=233 cterm=none
 
-    highlight SL_HL_CapsLockWarning ctermbg=118 ctermfg=232 cterm=bold
+    highlight SL_HL_SchemeName ctermbg=118 ctermfg=232 cterm=bold
 
     highlight SL_HL_FileInfo ctermbg=234 ctermfg=244 cterm=none
     highlight SL_HL_FileInfoTotalLines ctermbg=234 ctermfg=239 cterm=none
@@ -39,7 +39,6 @@ function! que#GetStatusLine(win_num, active) " {{{
     endif
     let l:statusline=l:mode
     if getbufvar(l:buf_num, '&paste')
-        " TODO: Paste ▶
         let l:statusline.="%#SL_HL_PasteWarning# PASTE %#SL_HL_Default#"
     endif
 
@@ -104,6 +103,9 @@ function! que#GetStatusLine(win_num, active) " {{{
     " if match(l:capsState, "on") > -1
         " let l:statusline.="%#SL_HL_CapsLockWarning# CAPS %#SL_HL_Default#"
     " endif
+    if exists("g:colors_name") > 0
+        let l:statusline.="%#SL_HL_SchemeName#".g:colors_name." %#SL_HL_Default#"
+    endif
 
     let l:statusline.="%#SL_HL_FileInfo#\ %l%#SL_HL_FileInfoTotalLines#/%L%#SL_HL_FileInfo#"
     let l:statusline.=",%c\ %P"

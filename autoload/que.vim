@@ -1,30 +1,30 @@
 function! que#DefineHighlights() "{{{
-    highlight SL_HL_Default ctermbg=233 ctermfg=249 cterm=none
-    highlight SL_HL_Mode ctermbg=55 ctermfg=7 cterm=bold
+    highlight SL_HL_Default guibg=#0C0C0C guifg=#919191 ctermbg=233 ctermfg=249 cterm=none
+    highlight SL_HL_Mode guibg=#AE24E5 guifg=#FFFFFF ctermbg=55 ctermfg=7 cterm=bold
     highlight SL_HL_PasteWarning ctermbg=140 ctermfg=232 cterm=bold
 
-    highlight SL_HL_FileNotModifiedNotReadOnly ctermbg=233 ctermfg=249 cterm=none
-    highlight SL_HL_FileNotModifiedReadOnly ctermbg=233 ctermfg=88 cterm=bold
-    highlight SL_HL_FileModifiedNotReadOnly ctermbg=22 ctermfg=7 cterm=none
-    highlight SL_HL_FileModifiedReadOnly ctermbg=22 ctermfg=196 cterm=bold
+    highlight SL_HL_FileNotModifiedNotReadOnly guibg=#0C0C0C guifg=#919191 ctermbg=233 ctermfg=249 cterm=none
+    highlight SL_HL_FileNotModifiedReadOnly guibg=#0C0C0C guifg=#CE0000 ctermbg=233 ctermfg=88 cterm=bold
+    highlight SL_HL_FileModifiedNotReadOnly guibg=#0C8F0C guifg=#FFFFFF ctermbg=22 ctermfg=7 cterm=none
+    highlight SL_HL_FileModifiedReadOnly guibg=#0C8F0C guifg=#CE0000 ctermbg=22 ctermfg=196 cterm=bold
 
-    highlight SL_HL_FileNotModifiableNotReadOnly ctermbg=88 ctermfg=232 cterm=bold
-    highlight SL_HL_FileNotModifiableReadOnly ctermbg=88 ctermfg=9 cterm=bold
+    highlight SL_HL_FileNotModifiableNotReadOnly guibg=#CE0000 ctermbg=88 ctermfg=232 cterm=bold
+    highlight SL_HL_FileNotModifiableReadOnly guibg=#CE0000 ctermbg=88 ctermfg=9 cterm=bold
 
-    highlight SL_HL_FileTypeIsUnix ctermbg=233 ctermfg=239 cterm=none
-    highlight SL_HL_FileTypeNotUnix ctermbg=52 ctermfg=233 cterm=none
+    highlight SL_HL_FileTypeIsUnix guibg=#0C0C0C guifg=#404040 ctermbg=233 ctermfg=239 cterm=none
+    highlight SL_HL_FileTypeNotUnix guibg=#CE0000 guifg=#0C0C0C ctermbg=52 ctermfg=233 cterm=none
 
     highlight SL_HL_SchemeName ctermbg=118 ctermfg=232 cterm=bold
 
-    highlight SL_HL_FileInfo ctermbg=234 ctermfg=244 cterm=none
-    highlight SL_HL_FileInfoTotalLines ctermbg=234 ctermfg=239 cterm=none
+    highlight SL_HL_FileInfo guibg=#0C0C0C guifg=#919191 ctermbg=234 ctermfg=244 cterm=none
+    highlight SL_HL_FileInfoTotalLines guibg=#0C0C0C guifg=#404040 ctermbg=234 ctermfg=239 cterm=none
 
-    highlight SL_HL_GitBranch ctermbg=25 ctermfg=232 cterm=bold
-    highlight SL_HL_GitModified ctermbg=25 ctermfg=88 cterm=bold
-    highlight SL_HL_GitStaged ctermbg=25 ctermfg=40 cterm=bold
-    highlight SL_HL_GitUntracked ctermbg=25 ctermfg=7 cterm=bold
+    highlight SL_HL_GitBranch guibg=#3B97BF guifg=#000000 ctermbg=25 ctermfg=232 cterm=none
+    highlight SL_HL_GitModified guibg=#3B97BF guifg=#CE0000 ctermbg=25 ctermfg=88 cterm=bold
+    highlight SL_HL_GitStaged guibg=#3B97BF guifg=#0C8F0C ctermbg=25 ctermfg=40 cterm=bold
+    highlight SL_HL_GitUntracked guibg=#3B97BF guifg=#FFFFFF ctermbg=25 ctermfg=7 cterm=bold
 
-    highlight SL_HL_SyntasticError ctermbg=88 ctermfg=7 cterm=bold
+    highlight SL_HL_SyntasticError guibg=#CE0000 guifg=#FFFFFF ctermbg=88 ctermfg=7 cterm=bold
 endfunction " }}}
 
 function! que#GetStatusLine(win_num, active) " {{{

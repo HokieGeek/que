@@ -103,9 +103,9 @@ function! que#GetStatusLine(win_num, active) " {{{
     " if match(l:capsState, "on") > -1
         " let l:statusline.="%#SL_HL_CapsLockWarning# CAPS %#SL_HL_Default#"
     " endif
-    if exists("g:colors_name") > 0
-        let l:statusline.="%#SL_HL_SchemeName#".g:colors_name." %#SL_HL_Default#"
-    endif
+    " if exists("g:colors_name") > 0
+        " let l:statusline.="%#SL_HL_SchemeName# ".g:colors_name." %#SL_HL_Default#"
+    " endif
 
     let l:statusline.="%#SL_HL_FileInfo#\ %l%#SL_HL_FileInfoTotalLines#/%L%#SL_HL_FileInfo#"
     let l:statusline.=",%c\ %P"

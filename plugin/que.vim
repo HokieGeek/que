@@ -1,5 +1,4 @@
 function! UpdateStatusLine()
-    call que#DefineHighlights()
     " echomsg "UpdateStatusLine(): ".strftime("%d/%m/%Y %H:%M:%S")
     for win_num in filter(range(1, winnr('$')), 'v:val != winnr()')
         " TODO: If not modifiable, save the line as a winvar / use a stored line
@@ -11,6 +10,7 @@ function! UpdateStatusLine()
 endfunction
 
 " function! QueToggleStatusLine()
+    autocmd VimEnter * call que#DefineHighlights()
     autocmd BufEnter,WinEnter,BufWritePost * set statusline=%!UpdateStatusLine()
 " endfunction
 

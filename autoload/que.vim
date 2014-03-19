@@ -1,31 +1,55 @@
-function! que#DefineHighlights() "{{{
-    highlight SL_HL_Default guibg=#0C0C0C guifg=#919191 ctermbg=233 ctermfg=249 cterm=none
-    highlight SL_HL_Mode guibg=#AE24E5 guifg=#FFFFFF ctermbg=93 ctermfg=7 cterm=bold
-    highlight SL_HL_PasteWarning ctermbg=140 ctermfg=232 cterm=bold
+" Highlighting {{{
+function! que#AssignHL(name,bg,fg,weight)
+    let l:gui = "guibg=".a:bg[0]." guifg=".a:fg[0]
+    let l:term = "ctermbg=".a:bg[1]." ctermfg=".a:fg[1]." cterm=".a:weight
+    execute "highlight SL_HL_".a:name." ".l:gui." ".l:term
+endfunction
+function! que#DefineHighlights()
+    let l:default_bg = ["#0C0C0c", "233"]
+    let l:default_fg = ["#919191", "249"]
+    let l:red_dark   = ["#CE0000", "52"] "88
+    let l:red_bright = ["#CE0000", "196"]
+    let l:green      = ["#0C8F0C", "22"]
+    let l:white      = ["#FFFFFF", "7"]
+    let l:black      = ["#000000", "232"]
+    let l:dark_grey  = ["#404040", "239"]
 
-    highlight SL_HL_FileNotModifiedNotReadOnly guibg=#0C0C0C guifg=#919191 ctermbg=233 ctermfg=249 cterm=none
-    highlight SL_HL_FileNotModifiedReadOnly guibg=#0C0C0C guifg=#CE0000 ctermbg=233 ctermfg=88 cterm=bold
-    highlight SL_HL_FileModifiedNotReadOnly guibg=#0C8F0C guifg=#FFFFFF ctermbg=22 ctermfg=7 cterm=none
-    highlight SL_HL_FileModifiedReadOnly guibg=#0C8F0C guifg=#CE0000 ctermbg=22 ctermfg=196 cterm=bold
+    let l:mode_bg    = ["#AE24E5", "93"]
+    let l:paste_bg   = ["#AF87D7", "140"]
 
-    highlight SL_HL_FileNotModifiableNotReadOnly guibg=#CE0000 ctermbg=88 ctermfg=232 cterm=bold
-    highlight SL_HL_FileNotModifiableReadOnly guibg=#CE0000 ctermbg=88 ctermfg=9 cterm=bold
+    let l:git_bg     = ["#F4D224", "178"]
+    " let l:hg_bg    = ["#3B97BF", "25"]
 
-    highlight SL_HL_FileTypeIsUnix guibg=#0C0C0C guifg=#404040 ctermbg=233 ctermfg=239 cterm=none
-    highlight SL_HL_FileTypeNotUnix guibg=#CE0000 guifg=#0C0C0C ctermbg=52 ctermfg=233 cterm=none
+    call que#AssignHL("Default",                  l:default_bg, l:default_fg, "none")
+    call que#AssignHL("Mode",                     l:mode_bg,    l:white,      "bold")
+    call que#AssignHL("PasteWarning",             l:paste_bg,   l:black,      "bold")
 
-    highlight SL_HL_SchemeName ctermbg=233 ctermfg=235 cterm=none
+    call que#AssignHL("NotModifiedNotReadOnly",   l:default_bg, l:default_fg, "none")
+    call que#AssignHL("NotModifiedReadOnly",      l:default_bg, l:red_dark,   "bold")
+    call que#AssignHL("ModifiedNotReadOnly",      l:green,      l:white,      "none")
+    call que#AssignHL("ModifiedReadOnly",         l:green,      l:red_bright, "bold")
 
-    highlight SL_HL_FileInfo guibg=#0C0C0C guifg=#919191 ctermbg=234 ctermfg=244 cterm=none
-    highlight SL_HL_FileInfoTotalLines guibg=#0C0C0C guifg=#404040 ctermbg=234 ctermfg=239 cterm=none
+    call que#AssignHL("NotModifiableNotReadOnly", l:red_dark,   l:black,      "bold")
+    call que#AssignHL("NotModifiableReadOnly",    l:red_dark,   l:red_bright, "bold")
 
-    highlight SL_HL_GitBranch guibg=#3B97BF guifg=#000000 ctermbg=25 ctermfg=232 cterm=none
-    highlight SL_HL_GitModified guibg=#3B97BF guifg=#CE0000 ctermbg=25 ctermfg=88 cterm=bold
-    highlight SL_HL_GitStaged guibg=#3B97BF guifg=#0C8F0C ctermbg=25 ctermfg=40 cterm=bold
-    highlight SL_HL_GitUntracked guibg=#3B97BF guifg=#FFFFFF ctermbg=25 ctermfg=7 cterm=bold
+    call que#AssignHL("TypeIsUnix",               l:default_bg, l:dark_grey,  "none")
+    call que#AssignHL("TypeNotUnix",              l:red_dark,   l:default_bg, "none")
 
-    highlight SL_HL_SyntasticError guibg=#CE0000 guifg=#FFFFFF ctermbg=88 ctermfg=7 cterm=bold
-endfunction " }}}
+    call que#AssignHL("FileInfo",                 l:default_bg, l:default_fg, "none")
+    call que#AssignHL("InfoTotalLines",           l:default_bg, l:dark_grey,  "none")
+
+    call que#AssignHL("GitBranch",                l:git_bg,     l:black,      "none")
+    call que#AssignHL("GitModified",              l:git_bg,     l:red_bright, "bold")
+    call que#AssignHL("GitStaged",                l:git_bg,     l:green,      "bold")
+    call que#AssignHL("GitUntracked",             l:git_bg,     l:white,      "bold")
+
+    call que#AssignHL("SchemeName",               l:default_bg, l:default_bg, "none")
+
+    if exists(":SyntasticCheck")
+        call que#AssignHL("SyntasticError",       l:red_dark,   l:white,      "bold")
+    endif
+endfunction
+" }}}
 
 function! que#GetStatusLine(win_num, active) " {{{
     " echomsg " que#GetStatusLine(".a:win_num.", ".a:active.")"
@@ -96,7 +120,9 @@ function! que#GetStatusLine(win_num, active) " {{{
     let l:statusline.="%#SL_HL_Default#%="
 
     " Syntastic flag
-    let l:statusline.="%#SL_HL_SyntasticError#%{SyntasticStatuslineFlag()}%#SL_HL_Default#"
+    if exists(":SyntasticCheck")
+        let l:statusline.="%#SL_HL_SyntasticError#%{SyntasticStatuslineFlag()}%#SL_HL_Default#"
+    endif
 
     " TODO: This gets expensive
     " let l:capsState = system("xset -q | grep \"Caps Lock\" | awk '{ print $2$3$4 }'")
@@ -113,7 +139,6 @@ function! que#GetStatusLine(win_num, active) " {{{
     let l:statusline.="%*"
 
     return l:statusline
-    " call setwinvar(a:win_num, '&statusline', l:statusline)
 endfunction " }}}
 
 " vim: set foldmethod=marker number relativenumber formatoptions-=tc:

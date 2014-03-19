@@ -1,7 +1,11 @@
 " Highlighting {{{
 function! que#AssignHL(name,bg,fg,weight)
     let l:gui = "guibg=".a:bg[0]." guifg=".a:fg[0]
+    " echomsg "[".a:name."] ".a:bg[1]
     let l:term = "ctermbg=".a:bg[1]." ctermfg=".a:fg[1]." cterm=".a:weight
+    " let l:hl = "highlight SL_HL_".a:name." ".l:gui." ".l:term
+    " echomsg "  ".l:hl
+    " execute l:hl
     execute "highlight SL_HL_".a:name." ".l:gui." ".l:term
 endfunction
 function! que#DefineHighlights()
@@ -14,14 +18,14 @@ function! que#DefineHighlights()
     let l:black      = ["#000000", "232"]
     let l:dark_grey  = ["#404040", "239"]
 
-    let l:mode_bg    = ["#AE24E5", "93"]
+    let l:mode_bg    = ["#5F00D7", "56"]
     let l:paste_bg   = ["#AF87D7", "140"]
 
     let l:git_bg     = ["#F4D224", "178"]
     " let l:hg_bg    = ["#3B97BF", "25"]
 
     call que#AssignHL("Default",                  l:default_bg, l:default_fg, "none")
-    call que#AssignHL("Mode",                     l:mode_bg,    l:white,      "bold")
+    call que#AssignHL("Mode",                     l:mode_bg,    l:black,      "none")
     call que#AssignHL("PasteWarning",             l:paste_bg,   l:black,      "bold")
 
     call que#AssignHL("NotModifiedNotReadOnly",   l:default_bg, l:default_fg, "none")
@@ -73,22 +77,22 @@ function! que#GetStatusLine(win_num, active) " {{{
         if getbufvar(l:buf_num, '&modifiable')
             if getbufvar(l:buf_num, '&modified')
                 if getbufvar(l:buf_num, '&readonly')
-                    let l:statusline.="%#SL_HL_FileModifiedReadOnly#"
+                    let l:statusline.="%#SL_HL_ModifiedReadOnly#"
                 else
-                    let l:statusline.="%#SL_HL_FileModifiedNotReadOnly#"
+                    let l:statusline.="%#SL_HL_ModifiedNotReadOnly#"
                 endif
             else
                 if getbufvar(l:buf_num, '&readonly')
-                    let l:statusline.="%#SL_HL_FileNotModifiedReadOnly#"
+                    let l:statusline.="%#SL_HL_NotModifiedReadOnly#"
                 else
-                    let l:statusline.="%#SL_HL_FileNotModifiedNotReadOnly#"
+                    let l:statusline.="%#SL_HL_NotModifiedNotReadOnly#"
                 endif
             endif
         else
             if getbufvar(l:buf_num, '&readonly')
-                let l:statusline.="%#SL_HL_FileNotModifiableReadOnly#"
+                let l:statusline.="%#SL_HL_NotModifiableReadOnly#"
             else
-                let l:statusline.="%#SL_HL_FileNotModifiableNotReadOnly#"
+                let l:statusline.="%#SL_HL_NotModifiableNotReadOnly#"
             endif
         endif
         let l:statusline.="\ ".l:filename."\ "
@@ -97,9 +101,9 @@ function! que#GetStatusLine(win_num, active) " {{{
     let l:ft = getbufvar(l:buf_num, '&filetype')
     if len(l:ft) > 0
         if getbufvar(l:buf_num, '&fileformat') == 'unix'
-            let l:statusline.="%#SL_HL_FileTypeIsUnix#"
+            let l:statusline.="%#SL_HL_TypeIsUnix#"
         else
-            let l:statusline.="%#SL_HL_FileTypeNotUnix#"
+            let l:statusline.="%#SL_HL_TypeNotUnix#"
         endif
         " let l:statusline.="\ ".l:ft."\ "
         let l:statusline.=l:ft."\ "
@@ -133,7 +137,7 @@ function! que#GetStatusLine(win_num, active) " {{{
         let l:statusline.="%#SL_HL_SchemeName# ".g:colors_name." %#SL_HL_Default#"
     endif
 
-    let l:statusline.="%#SL_HL_FileInfo#\ %l%#SL_HL_FileInfoTotalLines#/%L%#SL_HL_FileInfo#"
+    let l:statusline.="%#SL_HL_FileInfo#\ %l%#SL_HL_InfoTotalLines#/%L%#SL_HL_FileInfo#"
     let l:statusline.=",%c\ %P"
 
     let l:statusline.="%*"

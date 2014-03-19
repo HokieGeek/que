@@ -141,4 +141,4 @@ function! que#GetStatusLine(win_num, active) " {{{
     return l:statusline
 endfunction " }}}
 
-" vim: set foldmethod=marker number relativenumber formatoptions-=tc:
+" vim: set foldmethod=marker formatoptions-=tc:

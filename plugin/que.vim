@@ -14,4 +14,4 @@ endfunction
     autocmd BufEnter,WinEnter,BufWritePost * set statusline=%!UpdateStatusLine()
 " endfunction
 
-" vim: set foldmethod=marker number relativenumber formatoptions-=tc:
+" vim: set foldmethod=marker formatoptions-=tc:

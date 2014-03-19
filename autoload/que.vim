@@ -25,7 +25,7 @@ function! que#DefineHighlights()
     " let l:hg_bg    = ["#3B97BF", "25"]
 
     call que#AssignHL("Default",                  l:default_bg, l:default_fg, "none")
-    call que#AssignHL("Mode",                     l:mode_bg,    l:black,      "none")
+    call que#AssignHL("Mode",                     l:mode_bg,    l:white,      "none")
     call que#AssignHL("PasteWarning",             l:paste_bg,   l:black,      "bold")
 
     call que#AssignHL("NotModifiedNotReadOnly",   l:default_bg, l:default_fg, "none")

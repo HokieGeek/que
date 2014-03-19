@@ -1,6 +1,6 @@
 function! que#DefineHighlights() "{{{
     highlight SL_HL_Default guibg=#0C0C0C guifg=#919191 ctermbg=233 ctermfg=249 cterm=none
-    highlight SL_HL_Mode guibg=#AE24E5 guifg=#FFFFFF ctermbg=55 ctermfg=7 cterm=bold
+    highlight SL_HL_Mode guibg=#AE24E5 guifg=#FFFFFF ctermbg=93 ctermfg=7 cterm=bold
     highlight SL_HL_PasteWarning ctermbg=140 ctermfg=232 cterm=bold
 
     highlight SL_HL_FileNotModifiedNotReadOnly guibg=#0C0C0C guifg=#919191 ctermbg=233 ctermfg=249 cterm=none
@@ -14,7 +14,7 @@ function! que#DefineHighlights() "{{{
     highlight SL_HL_FileTypeIsUnix guibg=#0C0C0C guifg=#404040 ctermbg=233 ctermfg=239 cterm=none
     highlight SL_HL_FileTypeNotUnix guibg=#CE0000 guifg=#0C0C0C ctermbg=52 ctermfg=233 cterm=none
 
-    highlight SL_HL_SchemeName ctermbg=118 ctermfg=232 cterm=bold
+    highlight SL_HL_SchemeName ctermbg=233 ctermfg=235 cterm=none
 
     highlight SL_HL_FileInfo guibg=#0C0C0C guifg=#919191 ctermbg=234 ctermfg=244 cterm=none
     highlight SL_HL_FileInfoTotalLines guibg=#0C0C0C guifg=#404040 ctermbg=234 ctermfg=239 cterm=none
@@ -103,9 +103,9 @@ function! que#GetStatusLine(win_num, active) " {{{
     " if match(l:capsState, "on") > -1
         " let l:statusline.="%#SL_HL_CapsLockWarning# CAPS %#SL_HL_Default#"
     " endif
-    " if exists("g:colors_name") > 0
-        " let l:statusline.="%#SL_HL_SchemeName# ".g:colors_name." %#SL_HL_Default#"
-    " endif
+    if exists("g:colors_name") > 0
+        let l:statusline.="%#SL_HL_SchemeName# ".g:colors_name." %#SL_HL_Default#"
+    endif
 
     let l:statusline.="%#SL_HL_FileInfo#\ %l%#SL_HL_FileInfoTotalLines#/%L%#SL_HL_FileInfo#"
     let l:statusline.=",%c\ %P"

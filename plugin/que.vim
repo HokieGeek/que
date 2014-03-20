@@ -10,7 +10,7 @@ function! UpdateStatusLine()
 endfunction
 
 " function! QueToggleStatusLine()
-    autocmd VimEnter * call que#DefineHighlights()
+    autocmd VimEnter,ColorScheme * call que#DefineHighlights()
     autocmd BufEnter,WinEnter,BufWritePost * set statusline=%!UpdateStatusLine()
 " endfunction
 

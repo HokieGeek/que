@@ -47,7 +47,7 @@ function! que#DefineHighlights()
     call que#AssignHL("GitStaged",                l:git_bg,     l:green,      "bold")
     call que#AssignHL("GitUntracked",             l:git_bg,     l:white,      "bold")
 
-    call que#AssignHL("SchemeName",               l:default_bg, l:default_bg, "none")
+    call que#AssignHL("SchemeName",               l:default_bg, l:black, "none")
 
     if exists(":SyntasticCheck")
         call que#AssignHL("SyntasticError",       l:red_dark,   l:white,      "bold")

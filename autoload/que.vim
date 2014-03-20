@@ -55,6 +55,51 @@ function! que#DefineHighlights()
 endfunction
 " }}}
 
+function! que#GetVitStatusLine(win_num) " {{{
+    " let l:current_index_mod = getftime(expand(b:GitDir."/index"))
+    " let l:last_index_mod = getbufvar(a:file, "vit_last_index_modification")
+
+    " if l:current_index_mod != l:last_index_mod
+        " let l:status = system("git status --porcelain | grep '\<".a:file."\>$'")
+        " call setbufvar(a:file, "vit_last_index_modification", l:current_index_mod)
+        " call setbufvar(a:file, "vit_file_status", l:status_val)
+    " else
+        " echomsg "GitFileStatus(".a:file."): NO CHANGE: ".l:current_index_mod." ?= ".l:last_index_mod
+    " endif
+    " return getbufvar(a:file, "vit_file_status")
+
+    let l:ctime = localtime() - 1
+    if exists("w:que_vit_last_status_time") && w:que_vit_last_status_time >= l:ctime
+        let l:status=getwinvar(a:win_num, 'que_vit_last_status')
+    else
+        " let l:status=vit#StatusLine(a:win_num)
+        let l:branch=vit#GetGitBranch()
+        " echomsg "HERE: ".l:branch
+        " let l:branch=b:GitBranch
+        let l:status=""
+        if len(l:branch) > 0
+            let l:filename = bufname(winbufnr(a:win_num))
+            let l:status=vit#GitFileStatus(l:filename)
+            " echomsg "Updating: ".localtime()." [".l:status."]"
+
+            if l:status == 3 " Modified
+                let l:hl="%#SL_HL_GitModified#"
+            elseif l:status == 4 " Staged and not modified
+                let l:hl="%#SL_HL_GitStaged#"
+            elseif l:status == 2 " Untracked
+                let l:hl="%#SL_HL_GitUntracked#"
+            else
+                let l:hl="%#SL_HL_GitBranch#"
+            endif
+
+            let l:status=l:hl."\ ".l:branch."\ "
+        endif
+        call setwinvar(a:win_num, 'que_vit_last_status', l:status)
+        call setwinvar(a:win_num, 'que_vit_last_status_time', localtime())
+    endif
+    return l:status
+endfunction "}}}
+
 function! que#GetStatusLine(win_num, active) " {{{
     " echomsg " que#GetStatusLine(".a:win_num.", ".a:active.")"
     let l:buf_num = winbufnr(a:win_num)
@@ -110,15 +155,7 @@ function! que#GetStatusLine(win_num, active) " {{{
     endif
 
     " Display git info
-    let l:ctime = localtime() - 1
-    if exists("w:que_vit_last_status_time") && w:que_vit_last_status_time >= l:ctime
-        let l:vit_status=getwinvar(a:win_num, 'que_vit_last_status')
-    else
-        let l:vit_status=vit#StatusLine(a:win_num)
-        call setwinvar(a:win_num, 'que_vit_last_status', l:vit_status)
-        call setwinvar(a:win_num, 'que_vit_last_status_time', localtime())
-    endif
-    let l:statusline.=l:vit_status
+    let l:statusline.=que#GetVitStatusLine(a:win_num)
 
     " Right-justify the rest
     let l:statusline.="%#SL_HL_Default#%="

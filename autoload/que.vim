@@ -140,7 +140,7 @@ function! que#GetStatusLine(win_num, active) " {{{
                 let l:statusline.="%#SL_HL_NotModifiableNotReadOnly#"
             endif
         endif
-        let l:statusline.="\ ".l:filename."\ "
+        let l:statusline.="\ %f\ "
     endif
 
     let l:ft = getbufvar(l:buf_num, '&filetype')

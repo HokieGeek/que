@@ -1,3 +1,8 @@
+if exists("g:autoloaded_que") || v:version < 700
+    finish
+endif
+let g:autoloaded_que = 1
+
 " Highlighting {{{
 function! que#AssignHL(name,bg,fg,weight)
     let l:gui = "guibg=".a:bg[0]." guifg=".a:fg[0]

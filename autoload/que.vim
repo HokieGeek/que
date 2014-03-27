@@ -2,6 +2,7 @@ if exists("g:autoloaded_que") || v:version < 700
     finish
 endif
 let g:autoloaded_que = 1
+scriptencoding utf-8
 
 " Highlighting {{{
 function! que#AssignHL(name,bg,fg,weight)
@@ -37,7 +38,6 @@ function! que#DefineHighlights()
     call que#AssignHL("NotModifiedReadOnly",      l:default_bg, l:red_dark,   "bold")
     call que#AssignHL("ModifiedNotReadOnly",      l:green,      l:white,      "none")
     call que#AssignHL("ModifiedReadOnly",         l:green,      l:red_bright, "bold")
-
     call que#AssignHL("NotModifiableNotReadOnly", l:red_dark,   l:black,      "bold")
     call que#AssignHL("NotModifiableReadOnly",    l:red_dark,   l:red_bright, "bold")
 
@@ -52,7 +52,7 @@ function! que#DefineHighlights()
     call que#AssignHL("GitStaged",                l:git_bg,     l:green,      "bold")
     call que#AssignHL("GitUntracked",             l:git_bg,     l:white,      "bold")
 
-    call que#AssignHL("SchemeName",               l:default_bg, l:black, "none")
+    call que#AssignHL("SchemeName",               l:default_bg, l:black,      "none")
 
     if exists(":SyntasticCheck")
         call que#AssignHL("SyntasticError",       l:red_dark,   l:white,      "bold")
@@ -123,7 +123,6 @@ function! que#GetStatusLine(win_num, active) " {{{
     " File name, type and modified
     let l:filename = bufname(l:buf_num)
     if len(l:filename) > 0
-        " let l:statusline.="\ "
         if getbufvar(l:buf_num, '&modifiable')
             if getbufvar(l:buf_num, '&modified')
                 if getbufvar(l:buf_num, '&readonly')
@@ -145,7 +144,12 @@ function! que#GetStatusLine(win_num, active) " {{{
                 let l:statusline.="%#SL_HL_NotModifiableNotReadOnly#"
             endif
         endif
-        let l:statusline.="\ %f\ "
+        if index(argv(), bufname(l:buf_num)) == -1
+            let l:statusline.="♮"
+        else
+            let l:statusline.="\ "
+        endif
+        let l:statusline.="%f\ "
     endif
 
     let l:ft = getbufvar(l:buf_num, '&filetype')
@@ -155,12 +159,13 @@ function! que#GetStatusLine(win_num, active) " {{{
         else
             let l:statusline.="%#SL_HL_TypeNotUnix#"
         endif
-        " let l:statusline.="\ ".l:ft."\ "
         let l:statusline.=l:ft."\ "
     endif
 
     " Display git info
-    let l:statusline.=que#GetVitStatusLine(a:win_num)
+    if g:que__vcs_section_enabled
+        let l:statusline.=que#GetVitStatusLine(a:win_num)
+    endif
 
     " Right-justify the rest
     let l:statusline.="%#SL_HL_Default#%="

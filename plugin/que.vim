@@ -3,6 +3,8 @@ if exists("g:loaded_que") || v:version < 700
 endif
 let g:loaded_que = 1
 
+let g:que__vcs_section_enabled = 1
+
 function! UpdateStatusLine()
     " echomsg "UpdateStatusLine(): ".strftime("%d/%m/%Y %H:%M:%S")
     for win_num in filter(range(1, winnr('$')), 'v:val != winnr()')

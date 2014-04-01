@@ -3,7 +3,9 @@ if exists("g:loaded_que") || v:version < 700
 endif
 let g:loaded_que = 1
 
-let g:que__vcs_section_enabled = 1
+if !exists("g:que__vcs_section_enabled")
+    let g:que__vcs_section_enabled = 1
+endif
 
 function! UpdateStatusLine()
     for win_num in filter(range(1, winnr('$')), 'v:val != winnr()')

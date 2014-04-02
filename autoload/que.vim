@@ -145,7 +145,7 @@ function! que#GetStatusLine(win_num, active) " {{{
             endif
         endif
         if index(argv(), bufname(l:buf_num)) == -1
-            if has("win32") || has("win64")
+            if has("win32unix") || has("win32") || has("win64")
                 let l:statusline.="¬"
             else
                 let l:statusline.="♮"

@@ -98,9 +98,9 @@ function! que#GetVitStatusLine(win_num) " {{{
             endif
 
             let l:status=l:hl."\ ".l:branch."\ "
+            call setwinvar(a:win_num, 'que_vit_last_status', l:status)
+            call setwinvar(a:win_num, 'que_vit_last_status_time', localtime())
         endif
-        call setwinvar(a:win_num, 'que_vit_last_status', l:status)
-        call setwinvar(a:win_num, 'que_vit_last_status_time', localtime())
     endif
     return l:status
 endfunction "}}}

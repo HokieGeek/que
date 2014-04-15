@@ -57,6 +57,8 @@ function! que#DefineHighlights()
     if exists(":SyntasticCheck")
         call que#AssignHL("SyntasticError",       l:red_dark,   l:white,      "bold")
     endif
+
+    let b:que__defined_highlights=0
 endfunction
 " }}}
 

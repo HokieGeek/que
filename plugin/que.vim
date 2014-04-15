@@ -36,6 +36,7 @@ function! QueEnableStatusLine()
     augroup Que
         autocmd!
         autocmd VimEnter,ColorScheme * call que#DefineHighlights()
+        autocmd BufEnter * if !exists("b:que__defined_highlights") | call que#DefineHighlights() | endif
         autocmd BufEnter,WinEnter,BufWritePost * set statusline=%!UpdateStatusLine()
     augroup END
 

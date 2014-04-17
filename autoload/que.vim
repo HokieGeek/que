@@ -107,12 +107,22 @@ function! que#GetVitStatusLine(win_num) " {{{
     return l:status
 endfunction "}}}
 
-function! que#GetStatusLine(win_num, active) " {{{
-    " echomsg " que#GetStatusLine(".a:win_num.", ".a:active.")"
+" function! que#GetStatusLine(win_num, active) " {{{
+function! que#GetStatusLine(win_num) " {{{
+    " echomsg " que#GetStatusLine(".a:win_num."[".winnr()."]): ".strftime("%H:%M:%S")
     let l:buf_num = winbufnr(a:win_num)
 
+    " If not modifiable, save the line as a winvar / use a stored line
+    if getbufvar(l:buf_num, '&modifiable') == 0
+        let l:sl = getwinvar(a:win_num, "que__notmodifiable_status")
+        if strlen(l:sl) > 0
+            return l:sl
+        endif
+    endif
+
     " Mode and active indicator
-    if a:active == 1
+    if a:win_num == winnr()
+    " if a:active == 1
         let l:mode="%#SL_HL_mode#\ %{mode()}\ %#SL_HL_Default#"
     else
         let l:mode="%#SL_HL_Default#\ \ \ "
@@ -195,7 +205,11 @@ function! que#GetStatusLine(win_num, active) " {{{
 
     let l:statusline.="%*"
 
+    if getbufvar(l:buf_num, '&modifiable') == 0
+        call setwinvar(a:win_num, 'que__notmodifiable_status', l:statusline)
+    endif
     return l:statusline
+    " return "%{UpdateStatusLine()}".l:statusline
 endfunction " }}}
 
 " vim: set foldmethod=marker formatoptions-=tc:

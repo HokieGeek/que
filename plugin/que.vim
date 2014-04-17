@@ -8,20 +8,18 @@ if !exists("g:que__vcs_section_enabled")
 endif
 
 function! UpdateStatusLine()
-    for win_num in filter(range(1, winnr('$')), 'v:val != winnr()')
-        " If not modifiable, save the line as a winvar / use a stored line
-        if getbufvar(winbufnr(win_num), '&modifiable')
-            let l:sl = getwinvar(win_num, "que__notmodifiable_status")
-            if strlen(l:sl) <= 0
-                let l:sl = que#GetStatusLine(win_num, 0)
-                call setwinvar(win_num, 'que__notmodifiable_status', l:sl)
-            endif
-        else
-            let l:sl = que#GetStatusLine(win_num, 0)
-        endif
+    " echomsg "UpdateStatusLine(): ".winnr()
+    " for win_num in filter(range(1, winnr('$')), 'v:val != winnr()')
+        " call setwinvar(win_num, '&statusline', que#GetStatusLine(win_num, 0))
+    " endfor
+    " return que#GetStatusLine(winnr(), 1)
+    for win_num in range(1, winnr('$'))
+        " echomsg win_num." == ".winnr().": "(win_num == winnr())
+        " let l:sl="%{UpdateStatusLine()}".que#GetStatusLine(win_num)
+        let l:sl="%!que#GetStatusLine(".win_num.")"
         call setwinvar(win_num, '&statusline', l:sl)
     endfor
-    return que#GetStatusLine(winnr(), 1)
+    return ""
 endfunction
 
 function! QueDisableStatusLine()

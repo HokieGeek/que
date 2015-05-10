@@ -15,20 +15,22 @@ function! que#AssignHL(name,bg,fg,weight)
     execute "highlight SL_HL_".a:name." ".l:gui." ".l:term
 endfunction
 function! que#DefineHighlights()
-    let l:default_bg = ["#0C0C0c", "233"]
+    let l:default_bg = ["#0c0c0c", "233"]
     let l:default_fg = ["#919191", "249"]
-    let l:red_dark   = ["#CE0000", "52"] "88
-    let l:red_bright = ["#CE0000", "196"]
-    let l:green      = ["#0C8F0C", "22"]
-    let l:white      = ["#FFFFFF", "7"]
+    let l:red_dark   = ["#ce0000", "52"] "88
+    let l:red_bright = ["#ce0000", "196"]
+    let l:green      = ["#0c8f0c", "22"]
+    let l:white      = ["#ffffff", "7"]
     let l:black      = ["#000000", "232"]
     let l:dark_grey  = ["#404040", "239"]
 
-    let l:mode_bg    = ["#5F00D7", "56"]
-    let l:paste_bg   = ["#AF87D7", "140"]
+    " let l:mode_bg    = ["#5f00d7", "56"] " purple
+    let l:mode_bg    = ["#3a3a3a", "237"] " gray
 
-    let l:git_bg     = ["#F4D224", "178"]
-    " let l:hg_bg    = ["#3B97BF", "25"]
+    let l:paste_bg   = ["#af87d7", "140"]
+
+    let l:git_bg     = ["#f4d224", "178"]
+    " let l:hg_bg    = ["#3b97bf", "25"]
 
     call que#AssignHL("Default",                  l:default_bg, l:default_fg, "none")
     call que#AssignHL("Mode",                     l:mode_bg,    l:white,      "none")

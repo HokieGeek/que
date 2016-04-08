@@ -77,10 +77,10 @@ function! que#GetVitStatusLine(win_num) " {{{
     " endif
     " return getbufvar(a:file, "vit_file_status")
 
-    let l:ctime = localtime() - 1
-    if exists("w:que_vit_last_status_time") && w:que_vit_last_status_time >= l:ctime
-        let l:status=getwinvar(a:win_num, 'que_vit_last_status')
-    else
+    " let l:ctime = localtime() - 1
+    " if exists("w:que_vit_last_status_time") && w:que_vit_last_status_time >= l:ctime
+    "     let l:status=getwinvar(a:win_num, 'que_vit_last_status')
+    " else
         " let l:status=vit#StatusLine(a:win_num)
         let l:branch=vit#GetGitBranch()
         " echomsg "HERE: ".l:branch
@@ -102,10 +102,10 @@ function! que#GetVitStatusLine(win_num) " {{{
             endif
 
             let l:status=l:hl."\ ".l:branch."\ "
-            call setwinvar(a:win_num, 'que_vit_last_status', l:status)
-            call setwinvar(a:win_num, 'que_vit_last_status_time', localtime())
+            " call setwinvar(a:win_num, 'que_vit_last_status', l:status)
+            " call setwinvar(a:win_num, 'que_vit_last_status_time', localtime())
         endif
-    endif
+    " endif
     return l:status
 endfunction "}}}
 

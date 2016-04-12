@@ -65,18 +65,6 @@ endfunction
 " }}}
 
 function! que#GetVitStatusLine(win_num) " {{{
-    " let l:current_index_mod = getftime(expand(b:GitDir."/index"))
-    " let l:last_index_mod = getbufvar(a:file, "vit_last_index_modification")
-
-    " if l:current_index_mod != l:last_index_mod
-        " let l:status = system("git status --porcelain | grep '\<".a:file."\>$'")
-        " call setbufvar(a:file, "vit_last_index_modification", l:current_index_mod)
-        " call setbufvar(a:file, "vit_file_status", l:status_val)
-    " else
-        " echomsg "GitFileStatus(".a:file."): NO CHANGE: ".l:current_index_mod." ?= ".l:last_index_mod
-    " endif
-    " return getbufvar(a:file, "vit_file_status")
-
     " let l:ctime = localtime() - 1
     " if exists("w:que_vit_last_status_time") && w:que_vit_last_status_time >= l:ctime
     "     let l:status=getwinvar(a:win_num, 'que_vit_last_status')

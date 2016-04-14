@@ -70,7 +70,7 @@ function! que#GetVitStatusLine(win_num) " {{{
     "     let l:status=getwinvar(a:win_num, 'que_vit_last_status')
     " else
         " let l:status=vit#StatusLine(a:win_num)
-        let l:branch=vit#GetGitBranch()
+        let l:branch=vit#GetBranch()
         " echomsg "HERE: ".l:branch
         " let l:branch=b:GitBranch
         let l:status=""

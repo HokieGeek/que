@@ -7,11 +7,7 @@ scriptencoding utf-8
 " Highlighting {{{
 function! que#AssignHL(name,bg,fg,weight)
     let l:gui = "guibg=".a:bg[0]." guifg=".a:fg[0]
-    " echomsg "[".a:name."] ".a:bg[1]
     let l:term = "ctermbg=".a:bg[1]." ctermfg=".a:fg[1]." cterm=".a:weight
-    " let l:hl = "highlight SL_HL_".a:name." ".l:gui." ".l:term
-    " echomsg "  ".l:hl
-    " execute l:hl
     execute "highlight SL_HL_".a:name." ".l:gui." ".l:term
 endfunction
 function! que#DefineHighlights()
@@ -28,9 +24,6 @@ function! que#DefineHighlights()
     let l:mode_bg    = ["#3a3a3a", "237"] " gray
 
     let l:paste_bg   = ["#af87d7", "140"]
-
-    let l:git_bg     = ["#f4d224", "178"]
-    " let l:hg_bg    = ["#3b97bf", "25"]
 
     call que#AssignHL("Default",                  l:default_bg, l:default_fg, "none")
     call que#AssignHL("Mode",                     l:mode_bg,    l:black,      "none")
@@ -49,11 +42,6 @@ function! que#DefineHighlights()
     call que#AssignHL("FileInfo",                 l:default_bg, l:default_fg, "none")
     call que#AssignHL("InfoTotalLines",           l:default_bg, l:dark_grey,  "none")
 
-    call que#AssignHL("GitBranch",                l:git_bg,     l:black,      "none")
-    call que#AssignHL("GitModified",              l:git_bg,     l:red_bright, "bold")
-    call que#AssignHL("GitStaged",                l:git_bg,     l:green,      "bold")
-    call que#AssignHL("GitUntracked",             l:git_bg,     l:white,      "bold")
-
     call que#AssignHL("SchemeName",               l:default_bg, l:black,      "none")
 
     if exists(":SyntasticCheck")
@@ -63,39 +51,6 @@ function! que#DefineHighlights()
     let b:que__defined_highlights=0
 endfunction
 " }}}
-
-function! que#GetVitStatusLine(win_num) " {{{
-    " let l:ctime = localtime() - 1
-    " if exists("w:que_vit_last_status_time") && w:que_vit_last_status_time >= l:ctime
-    "     let l:status=getwinvar(a:win_num, 'que_vit_last_status')
-    " else
-        " let l:status=vit#StatusLine(a:win_num)
-        let l:branch=vit#GetBranch()
-        " echomsg "HERE: ".l:branch
-        " let l:branch=b:GitBranch
-        let l:status=""
-        if len(l:branch) > 0
-            let l:filename = bufname(winbufnr(a:win_num))
-            let l:status=vit#GitFileStatus(l:filename)
-            " echomsg "Updating: ".localtime()." [".l:status."]"
-
-            if l:status == 3 " Modified
-                let l:hl="%#SL_HL_GitModified#"
-            elseif l:status == 4 " Staged and not modified
-                let l:hl="%#SL_HL_GitStaged#"
-            elseif l:status == 2 " Untracked
-                let l:hl="%#SL_HL_GitUntracked#"
-            else
-                let l:hl="%#SL_HL_GitBranch#"
-            endif
-
-            let l:status=l:hl."\ ".l:branch."\ "
-            " call setwinvar(a:win_num, 'que_vit_last_status', l:status)
-            " call setwinvar(a:win_num, 'que_vit_last_status_time', localtime())
-        endif
-    " endif
-    return l:status
-endfunction "}}}
 
 function! que#GetStatusLine(win_num, active) " {{{
     " echomsg " que#GetStatusLine(".a:win_num.", ".a:active.")"
@@ -159,8 +114,12 @@ function! que#GetStatusLine(win_num, active) " {{{
     endif
 
     " Display git info
-    if g:que__vcs_section_enabled
-        let l:statusline.=que#GetVitStatusLine(a:win_num)
+    if g:que__vcs_section_enabled 
+        if exists("g:que__vcs_info")
+            let l:statusline.=g:que__vcs_info
+        elseif exists("g:Que__vcs_funcref")
+            let l:statusline.=g:Que__vcs_funcref()
+        endif
     endif
 
     " Right-justify the rest

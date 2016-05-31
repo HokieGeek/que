@@ -53,23 +53,39 @@ endfunction
 " }}}
 
 function! que#GetStatusLine(win_num, active) " {{{
-    " echomsg " que#GetStatusLine(".a:win_num.", ".a:active.")"
-    let l:buf_num = winbufnr(a:win_num)
+    " echom "que#GetStatusLine(".a:win_num." [".bufname(winbufnr(a:win_num))."], ".a:active.")"
+    let l:activeIndicator=que#GenerateActiveIndicator(a:active)
+    let l:sl=getwinvar(a:win_num, 'que__cached_status')
+    if a:active == 1 || len(l:sl) <= 0
+        let l:sl=que#GenerateStatusLine(a:win_num)
+        call setwinvar(a:win_num, 'que__cached_status', l:sl)
+    endif
+    return l:activeIndicator.l:sl
+endfunction " }}}
 
-    " Mode and active indicator
-    if a:active == 1
+function! que#GenerateActiveIndicator(isactive) " {{{
+    if a:isactive == 1
         let l:mode="%#SL_HL_mode#\ %{mode()}\ %#SL_HL_Default#"
     else
         let l:mode="%#SL_HL_Default#\ \ \ "
     endif
-    let l:statusline=l:mode
+
+    return l:mode
+endfunction
+
+function! que#GenerateStatusLine(win_num) " {{{
+    " echomsg " que#GenerateStatusLine(".a:win_num.")"
+    let l:buf_num = winbufnr(a:win_num)
+
+    " Mode and active indicator
+    let l:statusline=""
     if getbufvar(l:buf_num, '&paste')
         let l:statusline.="%#SL_HL_PasteWarning# PASTE %#SL_HL_Default#"
     endif
 
     " File name, type and modified
     let l:filename = bufname(l:buf_num)
-    if len(l:filename) > 0
+    if len(l:filename) > 0 " {{{
         if getbufvar(l:buf_num, '&modifiable')
             if getbufvar(l:buf_num, '&modified')
                 if getbufvar(l:buf_num, '&readonly')
@@ -101,7 +117,7 @@ function! que#GetStatusLine(win_num, active) " {{{
             let l:statusline.="\ "
         endif
         let l:statusline.="%f\ "
-    endif
+    endif " }}}
 
     let l:ft = getbufvar(l:buf_num, '&filetype')
     if len(l:ft) > 0
@@ -114,7 +130,7 @@ function! que#GetStatusLine(win_num, active) " {{{
     endif
 
     " Display git info
-    if g:que__vcs_section_enabled 
+    if g:que__vcs_section_enabled
         if exists("g:que__vcs_info")
             let l:statusline.=g:que__vcs_info
         elseif exists("g:Que__vcs_funcref")
@@ -130,11 +146,6 @@ function! que#GetStatusLine(win_num, active) " {{{
         let l:statusline.="%#SL_HL_SyntasticError#%{SyntasticStatuslineFlag()}%#SL_HL_Default#"
     endif
 
-    " TODO: This gets expensive
-    " let l:capsState = system("xset -q | grep \"Caps Lock\" | awk '{ print $2$3$4 }'")
-    " if match(l:capsState, "on") > -1
-        " let l:statusline.="%#SL_HL_CapsLockWarning# CAPS %#SL_HL_Default#"
-    " endif
     if exists("g:colors_name") > 0
         let l:statusline.="%#SL_HL_SchemeName# ".g:colors_name." %#SL_HL_Default#"
     endif

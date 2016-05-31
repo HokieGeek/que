@@ -1,32 +1,21 @@
 if exists("g:loaded_que") || v:version < 700
     finish
 endif
-let g:loaded_que = 1
+let g:loaded_que = 2
 
 if !exists("g:que__vcs_section_enabled")
     let g:que__vcs_section_enabled = 1
 endif
 
 function! UpdateStatusLine()
-    for win_num in filter(range(1, winnr('$')), 'v:val != winnr()')
-        " If not modifiable, save the line as a winvar / use a stored line
-        if getbufvar(winbufnr(win_num), '&modifiable')
-            let l:sl = getwinvar(win_num, "que__notmodifiable_status")
-            if strlen(l:sl) <= 0
-                let l:sl = que#GetStatusLine(win_num, 0)
-                call setwinvar(win_num, 'que__notmodifiable_status', l:sl)
-            endif
-        else
-            let l:sl = que#GetStatusLine(win_num, 0)
-        endif
-        call setwinvar(win_num, '&statusline', l:sl)
-    endfor
+    " echom "UpdateStatusLine(".a:isactive.")"
+    call map(filter(range(1, winnr('$')), 'v:val != winnr()'), "setwinvar(v:val, '&statusline', que#GetStatusLine(v:val, 0))")
     return que#GetStatusLine(winnr(), 1)
 endfunction
 
 function! QueDisableStatusLine()
     autocmd! Que
-    execute "set statusline=".g:que__original_status
+    execute "setlocal statusline=".g:que__original_status
 endfunction
 
 function! QueEnableStatusLine()
@@ -36,13 +25,14 @@ function! QueEnableStatusLine()
     augroup Que
         autocmd!
         autocmd VimEnter,ColorScheme * call que#DefineHighlights()
-        " autocmd BufEnter,BufRead * if !exists("b:que__defined_highlights") | call que#DefineHighlights() | endif
-        autocmd BufEnter,BufRead,BufWritePost * call que#DefineHighlights()
-        autocmd BufEnter,WinEnter,BufWritePost * set statusline=%!UpdateStatusLine()
+        " autocmd BufEnter,BufRead,BufWritePost * call que#DefineHighlights()
+        autocmd WinEnter,BufEnter,BufWritePost * setlocal statusline=%!UpdateStatusLine()
+        " autocmd WinLeave * setlocal statusline=%!UpdateStatusLine(0)
     augroup END
 
     call que#DefineHighlights()
-    set statusline=%!UpdateStatusLine()
+    setlocal statusline=%!UpdateStatusLine()
+    " call map(filter(range(1, winnr('$')), 'v:val != winnr()'), "setwinvar(v:val, '&statusline', que#GetStatusLine(v:val, 0))")
 endfunction
 
 if !exists("g:que__disable_on_start")
